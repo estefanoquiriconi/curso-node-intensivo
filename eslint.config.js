@@ -1,5 +1,4 @@
 import globals from 'globals';
-import pluginJs from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import js from '@eslint/js';
 import tsParser from '@typescript-eslint/parser'
@@ -16,7 +15,7 @@ export default [
       parser: tsParser,
       globals: {
         ...globals.browser,
-        ...globals.nove
+        ...globals.node
       }
     },
     plugins: {
