@@ -1,7 +1,7 @@
 import { ServerResponse, type IncomingMessage } from 'http';
 import { verify, type JwtPayload } from 'jsonwebtoken';
 import { isTokenRevoke } from '../models';
-import config from '../config';
+import config from '../config/config';
 
 /**
  * Interface representing an authenticated request.
@@ -13,7 +13,7 @@ export interface AuthenticatedRequest extends IncomingMessage {
 
 /**
  * Middleware function to authenticate a token from the request.
- * 
+ *
  * @param {AuthenticatedRequest} req - The incoming request object containing the token.
  * @param {ServerResponse} res - The server response object to send responses.
  * @returns {Promise<boolean>} - Returns true if authentication is successful, otherwise false.

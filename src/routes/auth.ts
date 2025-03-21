@@ -1,15 +1,18 @@
 import type { IncomingMessage, ServerResponse } from 'http';
 import {
+  addRevokeToken,
   authSchema,
   createUser,
   findUserByEmail,
   HttpMethod,
+  revokeUserToken,
   validatePassword,
 } from '../models';
 import { parseBody } from '../utils/parseBody';
 import { safeParse } from 'valibot';
 import { sign } from 'jsonwebtoken';
-import { config } from '../config';
+import { config } from '../config/config';
+import type { AuthenticatedRequest } from '../middleware/authentication';
 
 export const authRouter = async (req: IncomingMessage, res: ServerResponse) => {
   const { method, url } = req;
@@ -31,12 +34,14 @@ export const authRouter = async (req: IncomingMessage, res: ServerResponse) => {
       const user = await createUser(email, password);
       res.statusCode = 201;
       res.end(JSON.stringify(user));
+      return;
     } catch (err) {
       if (err instanceof Error) {
         res.end(JSON.stringify({ message: err.message }));
       } else {
         res.end(JSON.stringify({ message: 'Internal Server Error' }));
       }
+      return;
     }
   }
 
@@ -79,4 +84,29 @@ export const authRouter = async (req: IncomingMessage, res: ServerResponse) => {
     res.end(JSON.stringify({ accessToken, refreshToken }));
     return;
   }
+
+  if (url === 'auth/logout' && method === HttpMethod.POST) {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (token) {
+      addRevokeToken(token);
+      const formattedReq = req as AuthenticatedRequest;
+
+      if (
+        formattedReq.user &&
+        typeof formattedReq.user === 'object' &&
+        'id' in formattedReq.user
+      ) {
+        const result = revokeUserToken(formattedReq.user.email);
+        if (!result) {
+          res.statusCode = 403;
+          res.end(JSON.stringify({ message: 'Forbidden' }));
+        }
+      }
+      res.end(JSON.stringify({ message: 'Logged out' }));
+      return;
+    }
+  }
+
+  res.statusCode = 404;
+  res.end(JSON.stringify({ message: 'Endpoint Not Found' }));
 };

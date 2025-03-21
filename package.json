@@ -2,6 +2,10 @@
   "name": "curso-node-intensivo",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "lint": "eslint",
+    "dev": "bun run src/index.ts"
+  },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
     "@types/bcrypt": "^5.0.2",
@@ -22,9 +26,11 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@types/cors": "^2.8.17",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "jsonwebtoken": "^9.0.2",
     "valibot": "^1.0.0-rc.4"
-  }
+  },
+  "packageManager": "pnpm@10.6.3+sha512.bb45e34d50a9a76e858a95837301bfb6bd6d35aea2c5d52094fa497a467c43f5c440103ce2511e9e0a2f89c3d6071baac3358fc68ac6fb75e2ceb3d2736065e6"
 }
