@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "curso-node-intensivo",
+      "name": "bun-server",
       "dependencies": {
         "@types/cors": "^2.8.17",
         "bcrypt": "^5.1.1",
